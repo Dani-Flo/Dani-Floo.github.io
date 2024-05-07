@@ -34,11 +34,14 @@
 
         /* Container for the content */
         .container {
+            width: 400px;  /* Reduce width to make the square smaller */
+            height: 400px; /* Reduce height to make the square smaller */
             text-align: center;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             background-color: #ffffff;
+            overflow: auto;  /* Allow scrolling if content overflows */
         }
 
         /* Heading styling */
@@ -157,8 +160,14 @@
         // Function to simulate a fake virus scan
         function fakeScan() {
             const scanResults = document.getElementById('scanResults');
-            // Display fake scan results
-            scanResults.innerHTML = "Scanning website for viruses...<br>Scan complete! No viruses found!";
+            const websiteInput = document.getElementById('websiteInput');
+            const websiteURL = websiteInput.value;
+            // Display fake scan results for the specified website URL
+            if (websiteURL) {
+                scanResults.innerHTML = `Scanning website (${websiteURL}) for viruses...<br>Scan complete! No viruses found!`;
+            } else {
+                scanResults.innerHTML = "Please enter a website URL to scan.";
+            }
         }
 
         // Custom cursor function
@@ -177,19 +186,25 @@
     <div class="container">
         <h1>Hallo Toni, hier findest du den Link</h1>
         <p>Klicke unten, um auf das Video zu gelangen, damit dein Vater nichts sieht</p>
-        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">das video</a>
-
-        <!-- Button to start the fake virus scan -->
-        <button onclick="fakeScan()">Scan Website for Viruses</button>
-
-        <!-- Display area for the scan results -->
-        <div id="scanResults"></div>
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Das Video</a>
 
         <!-- Button to generate a random joke -->
         <button id="jokeButton" onclick="displayRandomJoke()">Generate a Random Joke</button>
 
         <!-- Display area for the joke -->
         <div id="jokeDisplay"></div>
+
+        <!-- Section for the website URL input and virus scan -->
+        <div style="margin-top: 30px;">
+            <label for="websiteInput">Enter website URL:</label>
+            <input type="text" id="websiteInput" placeholder="Enter website URL" />
+        </div>
+
+        <!-- Button to start the fake virus scan -->
+        <button onclick="fakeScan()">Scan Website for Viruses</button>
+
+        <!-- Display area for the scan results -->
+        <div id="scanResults"></div>
     </div>
 </body>
 
