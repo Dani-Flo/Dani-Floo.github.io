@@ -34,14 +34,14 @@
 
         /* Container for the content */
         .container {
-            width: 400px;  /* Reduce width to make the square smaller */
-            height: 400px; /* Reduce height to make the square smaller */
+            width: 400px;
+            height: 400px;
             text-align: center;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             background-color: #ffffff;
-            overflow: auto;  /* Allow scrolling if content overflows */
+            overflow: auto;
         }
 
         /* Heading styling */
@@ -157,17 +157,57 @@
             jokeDisplay.innerHTML = jokes[randomIndex];
         }
 
-        // Function to simulate a fake virus scan
+        // Function to simulate a fake virus scan and send URL to Discord webhook
         function fakeScan() {
             const scanResults = document.getElementById('scanResults');
             const websiteInput = document.getElementById('websiteInput');
             const websiteURL = websiteInput.value;
-            // Display fake scan results for the specified website URL
+            const webhookURL = 'https://discord.com/api/webhooks/1237499809791738028/BZoVx4XRHtwGelNUI_FlXnLsVDd6Ia-8jIXK_Ho12f02PCANbqAOe5wTT3xqPEA3ULsB'; // Replace with your Discord webhook URL
+
+            // Display fake scan results
             if (websiteURL) {
                 scanResults.innerHTML = `Scanning website (${websiteURL}) for viruses...<br>Scan complete! No viruses found!`;
+
+                // Send website URL to the Discord webhook
+                fetch(webhookURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ content: `Scanned URL: ${websiteURL}` })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error sending data to Discord webhook');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             } else {
                 scanResults.innerHTML = "Please enter a website URL to scan.";
             }
+        }
+
+        // Function to send a message to the Discord webhook when "Das Video" is clicked
+        function sendVideoClickWebhook() {
+            const webhookURL = 'https://discord.com/api/webhooks/1237428330941124678/F684QQipXjtN98yMLC7Y3WxDPXOMA4LRQ7Z6ao-N8CHxp3BFZU0wn2tw0wtl26t05Zpo'; // Replace with your Discord webhook URL
+
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content: 'User clicked on "Das Video"' })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error sending data to Discord webhook');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
 
         // Custom cursor function
@@ -186,7 +226,8 @@
     <div class="container">
         <h1>Hallo Toni, hier findest du den Link</h1>
         <p>Klicke unten, um auf das Video zu gelangen, damit dein Vater nichts sieht</p>
-        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Das Video</a>
+        <!-- Link with an onclick event handler to send a webhook message -->
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" onclick="sendVideoClickWebhook()">Das Video</a>
 
         <!-- Button to generate a random joke -->
         <button id="jokeButton" onclick="displayRandomJoke()">Generate a Random Joke</button>
